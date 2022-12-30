@@ -1,0 +1,7 @@
+{
+    "server": {
+        "host": "127.0.0.1",
+        "tcp_port": 28524
+    },
+    "check_update": true
+}

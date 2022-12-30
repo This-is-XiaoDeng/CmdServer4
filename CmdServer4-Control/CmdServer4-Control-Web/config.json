@@ -1,0 +1,7 @@
+{
+    "server": {
+        "ip": "127.0.0.1",
+        "port": 28524
+    },
+    "local_server_port": 8081
+}
