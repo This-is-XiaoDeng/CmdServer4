@@ -6,8 +6,8 @@
 
 #### 特点
 
-- 轻量：`v4.0.0-pre`版本全项目总计 21.1 KiB (21,639 字节)
-- 快速：简单配置后即可建立连接
+- 简介：没有复杂的操作界面
+- 快速：简单配置后即可轻松建立连接
 - 适用广：可直接与无公网IP设备建立连接
 
 #### 文件树（`v4.0.0-pre`）
@@ -33,22 +33,12 @@
 
 ### 依赖
 
-#### 服务端
-
 1. Python3
-
-#### 主控端
-
-##### Web
-
-1. Python3
-2. flask
-
-#### 被控端
-
-1. Python3
+2. flask (`主控web`)
 
 ### 步骤
+
+#### 安装
 
 1. 安装Python3
 2. 选择您的端类型
@@ -56,7 +46,7 @@
 4. 修改程序配置（可选）
 5. 启动程序
 
-#### 人话：
+#### 使用
 
 在被控设备进入`CmdServer4-Controlled/`，运行`python3 main.py`
 
@@ -65,9 +55,15 @@
 ```bash
 [21:33:12][server / INFO]: CmdServer started, client id: f4pzm
 ```
-随后在主控设备进入`CmdServer4-Control/`，以`CmdServer4-Control-Web`为例，进入目录，运行`python3 main.py 刚刚拿到的client id`
+随后在主控设备进入`CmdServer4-Control/`
+
+以`CmdServer4-Control-Web`为例，进入目录，运行`python3 main.py 刚刚拿到的client id`
 
 在浏览器访问`http://127.0.0.1:8081/send?command=命令&cwd=工作目录`即可
 
 
+## 鸣谢（排名不分先后）
 
+- [IT Craft Development Team](https://itcdt.top)
+  - [xxtg666](https://github.com/xxtg666)
+  - [XieXiLin3](https://github.com/XieXiLin3)
