@@ -68,6 +68,7 @@ class cmdServerClient:
         while True:
             length = 0
             for recv in self.recv_data:
+                self.logger.debug(recv)
                 if recv["type"] == "createdTask" and tid is None:
                     tid = recv["tid"]
                     self.recv_data.pop(length)
@@ -86,6 +87,7 @@ class cmdServerClient:
         command = flask.request.args.get("command")
         cwd = flask.request.args.get("cwd")
         self.send("createTask", {"command": command, "cwd": cwd})
+        self.logger.debug(command)
         output = self.getOutput()
         return output
 
