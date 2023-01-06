@@ -34,10 +34,13 @@ class CMDServer:
             # 客户端登录
             try:
                 clientLogin = json.loads(sock.recv(1024))
-                
+
                 # 被控端登录
                 if clientLogin["type"] == "ControlledLogin":
-                    cid = self.get_cid("controlled")
+                    if clientLogin["data"]["cid"] is not None and clientLogin["data"]["cid"] not in self.clients["controlled"].keys():
+                        cid = clientLogin["data"]["cid"]
+                    else:
+                        cid = self.get_cid("controlled")
                     self.clients["controlled"][cid] = {
                         "cid": cid,
                         "addr": addr,
@@ -50,7 +53,7 @@ class CMDServer:
                                 sock))}
                     sock.send(json.dumps({"cid": cid}).encode())
                     self.clients["controlled"][cid]["thread"].start()
-                    
+
                 # 主控端登录
                 elif clientLogin["type"] == "ControlLogin":
                     cid = self.get_cid("control")
@@ -58,7 +61,8 @@ class CMDServer:
                     try:
                         self.logger.debug(clientLogin)
                         self.logger.debug(self.clients)
-                        controlled = self.clients["controlled"][clientLogin["data"]["controlled_id"]]
+                        controlled = self.clients["controlled"][clientLogin["data"]
+                                                                ["controlled_id"]]
                     except KeyError as e:
                         # 找不到被控端
                         self.logger.debug(e)
@@ -82,22 +86,21 @@ class CMDServer:
                                         cid,
                                         sock))}
                             sock.send(
-                                    json.dumps(
-                                        {
-                                            "cid": cid,
-                                            "code": 200,
-                                            "controlled": {
-                                                "data": controlled["data"],
-                                                "addr": controlled["addr"]
-                                            }
+                                json.dumps(
+                                    {
+                                        "cid": cid,
+                                        "code": 200,
+                                        "controlled": {
+                                            "data": controlled["data"],
+                                            "addr": controlled["addr"]
                                         }
-                                    ).encode("utf-8"))
+                                    }
+                                ).encode("utf-8"))
                             self.clients["control"][cid]["thread"].start()
             except Exception as e:
                 # 处理失败
                 self.logger.error(e)
                 sock.close()
-
 
     def controlReceiveThread(self, cid, sock):
         logger = logging.getLogger(f"control-{cid}")
@@ -118,11 +121,11 @@ class CMDServer:
                     recv_data["type"],
                     recv_data
                 )
-            except:
+            except BaseException:
                 logger.warning("Client disconnect from this server!")
                 try:
                     self.clients["control"][cid]["sock"].close()
-                except:
+                except BaseException:
                     pass
                 self.clients["control"].pop(cid)
 
@@ -144,7 +147,7 @@ class CMDServer:
                 logger.debug(recv)
                 recv_data = json.loads(recv)
                 logger.debug(recv_data)
-                
+
                 # 转发数据
                 try:
                     self.sendMessageTo(
@@ -163,17 +166,17 @@ class CMDServer:
                 # 分析数据
                 if recv_data["type"] == "taskFinished":
                     self.tasks.pop(recv_data["data"]["tid"])
-                    self.logger.info(f"Task {recv_data['data']['tid']} finished!")
+                    self.logger.info(
+                        f"Task {recv_data['data']['tid']} finished!")
                 # elif recv_data["type"] == "commandOutput":
                 #    sock.send(b"done")
-            except:
+            except BaseException:
                 logger.warning("Client disconnet from this server!")
                 try:
                     self.clients["controlled"][cid]["sock"].close()
-                except:
+                except BaseException:
                     pass
                 self.clients["controlled"].pop(cid)
-
 
     def get_cid(self, client_type):
         cid = ""

@@ -4,5 +4,6 @@
         "tcp_port": 28524
     },
     "check_update": true,
+    "cid": null,
     "password": null
 }

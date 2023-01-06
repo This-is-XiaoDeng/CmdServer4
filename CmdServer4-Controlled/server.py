@@ -22,11 +22,11 @@ class CMDServerControlled:
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.config = config
         # 连接服务器
-        self.connect()
+        self.connect(self.config["cid"])
         # 启动循环
         self.execute()
 
-    def connect(self):
+    def connect(self, cid=None):
         # 连接中心服务器
         self.logger.debug(self.config)
         self.logger.info(
@@ -36,7 +36,7 @@ class CMDServerControlled:
              self.config["server"]["tcp_port"]))
         self.logger.info("Server connected.")
         # 登录服务器
-        loginMessage = {"user": getpass.getuser(), "password": None}
+        loginMessage = {"user": getpass.getuser(), "password": None, "cid": cid}
         if self.config["password"]:
             loginMessage["password"] = hashlib.sha1(self.config["password"].encode("utf-8")).hexdigest()
         self.send("ControlledLogin", loginMessage)
