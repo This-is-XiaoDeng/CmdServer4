@@ -11,8 +11,9 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 parser = argparse.ArgumentParser(description="A server of commands.")
-parser.version = "4.0.0"
+parser.version = "4.0.1"
 parser.add_argument("-v", "--version", action="version")
+parser.add_argument("-p", "--password", help="Control connect password")
 args = parser.parse_args()
 config = json.load(open("./config.json"))
 
@@ -23,9 +24,10 @@ def main():
         update_checker.check_update(parser.version)
     # 启动服务
     logger.info("Starting CmdServer Controlled Client")
-    server.cmdServerControlled(config)
-    logger.info("Exited.")
+    server.CMDServerControlled(config)
 
 
 if __name__ == "__main__":
+    if args.password:
+        config["password"] = args.password
     main()

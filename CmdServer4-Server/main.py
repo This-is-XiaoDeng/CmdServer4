@@ -10,10 +10,10 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 parser = argparse.ArgumentParser(description="A server of commands.")
-parser.version = "4.0.0"
+parser.version = "4.0.1"
 parser.add_argument("-v", "--version", action="version")
 parser.add_argument("-p", "--port", type=int, help="csr server port")
-parser.add_argument("-l", "--listen", type=int, help="csr server port")
+parser.add_argument("-l", "--listen", type=int, help="max connection")
 args = parser.parse_args()
 config = json.load(open("./config.json"))
 config["port"] = args.port or config["port"]
@@ -22,7 +22,7 @@ config["listen"] = args.listen or config["listen"]
 
 def main():
     logger.info(f"CmdServer 4 [Version {parser.version}] Server")
-    server.cmdServer(config)
+    server.CMDServer(config)
     logger.info("Exited.")
 
 
